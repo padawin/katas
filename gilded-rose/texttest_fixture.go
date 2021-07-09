@@ -10,15 +10,15 @@ func main() {
 	fmt.Println("OMGHAI!")
 
 	var items = []*GildedRoseItem{
-		{Item{"+5 Dexterity Vest", 10, 20}, false, nil},
-		{Item{"Aged Brie", 2, 0}, false, nil},
-		{Item{"Elixir of the Mongoose", 5, 7}, false, nil},
-		{Item{"Sulfuras, Hand of Ragnaros", 0, 80}, false, nil},
-		{Item{"Sulfuras, Hand of Ragnaros", -1, 80}, false, nil},
-		{Item{"Backstage passes to a TAFKAL80ETC concert", 15, 20}, false, nil},
-		{Item{"Backstage passes to a TAFKAL80ETC concert", 10, 49}, false, nil},
-		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 49}, false, nil},
-		{Item{"Conjured Mana Cake", 3, 6}, true, nil}, // <-- :O
+		{Item{"+5 Dexterity Vest", 10, 20}, false, ""},
+		{Item{"Aged Brie", 2, 0}, false, "item_update_brie"},
+		{Item{"Elixir of the Mongoose", 5, 7}, false, ""},
+		{Item{"Sulfuras, Hand of Ragnaros", 0, 80}, false, "item_update_sulfura"},
+		{Item{"Sulfuras, Hand of Ragnaros", -1, 80}, false, "item_update_sulfura"},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 15, 20}, false, "item_update_backstage_pass"},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 10, 49}, false, "item_update_backstage_pass"},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 49}, false, "item_update_backstage_pass"},
+		{Item{"Conjured Mana Cake", 3, 6}, true, ""}, // <-- :O
 	}
 
 	days := 2

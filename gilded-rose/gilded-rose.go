@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	python "github.com/sbinet/go-python"
+)
+
 type Item struct {
 	name            string
 	sellIn, quality int
@@ -10,9 +16,14 @@ type ItemSellInEvolution int
 
 type GildedRoseItem struct {
 	Item
-	isConjured bool
-	update     *func(item *GildedRoseItem) (ItemQualityEvolution, ItemSellInEvolution)
+	isConjured   bool
+	updateScript string
 }
+
+const (
+	defaultQualityEvolution = -1
+	defaultSellInEvolution  = -1
+)
 
 func UpdateQuality(items []*GildedRoseItem) {
 	for i := 0; i < len(items); i++ {
@@ -27,13 +38,11 @@ func UpdateQuality(items []*GildedRoseItem) {
 func getQualityAndSellInEvolution(item *GildedRoseItem) (ItemQualityEvolution, ItemSellInEvolution) {
 	var qualityEvolution ItemQualityEvolution
 	var sellInEvolution ItemSellInEvolution
+	var err error
 
-	if item.update != nil {
-		qualityEvolution, sellInEvolution = (*item.update)(item)
-	} else {
-		// Generic case
-		qualityEvolution = -1
-		sellInEvolution = -1
+	qualityEvolution, sellInEvolution, err = executeItemUpdateScript(item, defaultQualityEvolution, defaultSellInEvolution)
+	if item.updateScript != "" && err != nil {
+		fmt.Println(err)
 	}
 
 	if item.sellIn <= 0 {
@@ -62,4 +71,38 @@ func updateItemQualityAndSellIn(item *GildedRoseItem, qualityEvolution ItemQuali
 		item.quality = 0
 	}
 	item.sellIn += int(sellInEvolution)
+}
+
+func executeItemUpdateScript(item *GildedRoseItem, defaultQualityEvolution ItemQualityEvolution, defaultSellInEvolution ItemSellInEvolution) (ItemQualityEvolution, ItemSellInEvolution, error) {
+	python.Initialize()
+	defer python.Finalize()
+
+	itemUpdateModule := python.PyImport_ImportModule(item.updateScript)
+	if itemUpdateModule == nil {
+		return defaultQualityEvolution, defaultSellInEvolution, fmt.Errorf("Error importing module: %s", item.updateScript)
+	}
+
+	updateFunc := itemUpdateModule.GetAttrString("update")
+	if updateFunc == nil {
+		return defaultQualityEvolution, defaultSellInEvolution, fmt.Errorf("Error importing function `update`")
+	}
+
+	args := python.PyTuple_New(1)
+	brieDict := python.PyDict_New()
+	python.PyDict_SetItem(brieDict, python.PyString_FromString("name"), python.PyString_FromString(item.name))
+	python.PyDict_SetItem(brieDict, python.PyString_FromString("quality"), python.PyInt_FromLong(item.quality))
+	python.PyDict_SetItem(brieDict, python.PyString_FromString("sellIn"), python.PyInt_FromLong(item.sellIn))
+	python.PyTuple_SetItem(args, 0, brieDict)
+	res := updateFunc.CallObject(args)
+	if !python.PyTuple_Check(res) || python.PyTuple_Size(res) != 2 {
+		return defaultQualityEvolution, defaultSellInEvolution, fmt.Errorf("update must return a tuple of 2 elements")
+	}
+	qe := python.PyTuple_GetItem(res, 0)
+	se := python.PyTuple_GetItem(res, 1)
+	if !python.PyInt_Check(qe) {
+		return defaultQualityEvolution, defaultSellInEvolution, fmt.Errorf("the first returned element of update must be an int")
+	} else if !python.PyInt_Check(se) {
+		return defaultQualityEvolution, defaultSellInEvolution, fmt.Errorf("the second returned element of update must be an int")
+	}
+	return ItemQualityEvolution(python.PyInt_AsLong(qe)), ItemSellInEvolution(python.PyInt_AsLong(se)), nil
 }
