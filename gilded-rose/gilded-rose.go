@@ -5,7 +5,11 @@ type Item struct {
 	sellIn, quality int
 }
 
-func UpdateQuality(items []*Item) {
+type GildedRoseItem struct {
+	Item
+}
+
+func UpdateQuality(items []*GildedRoseItem) {
 	for i := 0; i < len(items); i++ {
 		item := items[i]
 		var qualityEvolution int

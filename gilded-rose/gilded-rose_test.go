@@ -8,8 +8,8 @@ import (
 
 func Test_SizeIsPreserved(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"foo", 0, 0},
+	var items = []*GildedRoseItem{
+		{Item{"foo", 0, 0}},
 	}
 
 	UpdateQuality(items)
@@ -19,8 +19,8 @@ func Test_SizeIsPreserved(t *testing.T) {
 
 func Test_SellInAndQualityAreUpdated(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"foo", 17, 42},
+	var items = []*GildedRoseItem{
+		{Item{"foo", 17, 42}},
 	}
 
 	UpdateQuality(items)
@@ -32,9 +32,9 @@ func Test_SellInAndQualityAreUpdated(t *testing.T) {
 
 func Test_QualityDecreasesTwiceAsFastWhenExpired(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"foo", 0, 42},
-		{"foo", -1, 42},
+	var items = []*GildedRoseItem{
+		{Item{"foo", 0, 42}},
+		{Item{"foo", -1, 42}},
 	}
 
 	UpdateQuality(items)
@@ -48,9 +48,9 @@ func Test_QualityDecreasesTwiceAsFastWhenExpired(t *testing.T) {
 
 func Test_QualityIsNeverNegative(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"foo", 0, 1},
-		{"foo", -1, 0},
+	var items = []*GildedRoseItem{
+		{Item{"foo", 0, 1}},
+		{Item{"foo", -1, 0}},
 	}
 
 	UpdateQuality(items)
@@ -66,10 +66,10 @@ func Test_QualityIsNeverNegative(t *testing.T) {
 
 func Test_SpecificAgedBrieIncreasesQuality(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Aged Brie", 17, 42},
-		{"Aged Brie", -1, 49},
-		{"Aged Brie", -1, 40},
+	var items = []*GildedRoseItem{
+		{Item{"Aged Brie", 17, 42}},
+		{Item{"Aged Brie", -1, 49}},
+		{Item{"Aged Brie", -1, 40}},
 	}
 
 	UpdateQuality(items)
@@ -85,8 +85,8 @@ func Test_SpecificAgedBrieIncreasesQuality(t *testing.T) {
 
 func Test_SpecificAgedBrieIncreasesQualityNeverGreaterThan50(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Aged Brie", -1, 50},
+	var items = []*GildedRoseItem{
+		{Item{"Aged Brie", -1, 50}},
 	}
 
 	UpdateQuality(items)
@@ -98,8 +98,8 @@ func Test_SpecificAgedBrieIncreasesQualityNeverGreaterThan50(t *testing.T) {
 
 func Test_SpecificSulfuraSellInAndQualityDoNotChange(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Sulfuras, Hand of Ragnaros", 17, 42},
+	var items = []*GildedRoseItem{
+		{Item{"Sulfuras, Hand of Ragnaros", 17, 42}},
 	}
 
 	UpdateQuality(items)
@@ -111,8 +111,8 @@ func Test_SpecificSulfuraSellInAndQualityDoNotChange(t *testing.T) {
 
 func Test_SpecificBackstagePassesIncreaseInQuality(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 17, 42},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 17, 42}},
 	}
 
 	UpdateQuality(items)
@@ -124,8 +124,8 @@ func Test_SpecificBackstagePassesIncreaseInQuality(t *testing.T) {
 
 func Test_SpecificBackstagePassesIncreaseInQualityButNotAbove50(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 17, 50},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 17, 50}},
 	}
 
 	UpdateQuality(items)
@@ -137,9 +137,9 @@ func Test_SpecificBackstagePassesIncreaseInQualityButNotAbove50(t *testing.T) {
 
 func Test_SpecificBackstagePassesIncreaseInQualityBy2When10DaysOrLessFromExpiry(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 10, 42},
-		{"Backstage passes to a TAFKAL80ETC concert", 6, 42},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 10, 42}},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 6, 42}},
 	}
 
 	UpdateQuality(items)
@@ -153,9 +153,9 @@ func Test_SpecificBackstagePassesIncreaseInQualityBy2When10DaysOrLessFromExpiry(
 
 func Test_SpecificBackstagePassesIncreaseInQualityBy2When10DaysOrLessFromExpiryButNotAbove50(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 10, 50},
-		{"Backstage passes to a TAFKAL80ETC concert", 10, 49},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 10, 50}},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 10, 49}},
 	}
 
 	UpdateQuality(items)
@@ -169,9 +169,9 @@ func Test_SpecificBackstagePassesIncreaseInQualityBy2When10DaysOrLessFromExpiryB
 
 func Test_SpecificBackstagePassesIncreaseInQualityBy3When5DaysOrLessFromExpiry(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 5, 42},
-		{"Backstage passes to a TAFKAL80ETC concert", 1, 42},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 42}},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 1, 42}},
 	}
 
 	UpdateQuality(items)
@@ -185,10 +185,10 @@ func Test_SpecificBackstagePassesIncreaseInQualityBy3When5DaysOrLessFromExpiry(t
 
 func Test_SpecificBackstagePassesIncreaseInQualityBy3When5DaysOrLessFromExpiryButNotAbove50(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 5, 50},
-		{"Backstage passes to a TAFKAL80ETC concert", 5, 49},
-		{"Backstage passes to a TAFKAL80ETC concert", 5, 48},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 50}},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 49}},
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 5, 48}},
 	}
 
 	UpdateQuality(items)
@@ -204,8 +204,8 @@ func Test_SpecificBackstagePassesIncreaseInQualityBy3When5DaysOrLessFromExpiryBu
 
 func Test_SpecificBackstagePassesQualityBecomes0WhenExpired(t *testing.T) {
 	g := NewGomegaWithT(t)
-	var items = []*Item{
-		{"Backstage passes to a TAFKAL80ETC concert", 0, 42},
+	var items = []*GildedRoseItem{
+		{Item{"Backstage passes to a TAFKAL80ETC concert", 0, 42}},
 	}
 
 	UpdateQuality(items)
