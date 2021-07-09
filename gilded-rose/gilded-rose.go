@@ -10,7 +10,8 @@ type ItemSellInEvolution int
 
 type GildedRoseItem struct {
 	Item
-	update *func(item *GildedRoseItem) (ItemQualityEvolution, ItemSellInEvolution)
+	isConjured bool
+	update     *func(item *GildedRoseItem) (ItemQualityEvolution, ItemSellInEvolution)
 }
 
 func UpdateQuality(items []*GildedRoseItem) {
@@ -36,6 +37,10 @@ func getQualityAndSellInEvolution(item *GildedRoseItem) (ItemQualityEvolution, I
 	}
 
 	if item.sellIn <= 0 {
+		qualityEvolution *= 2
+	}
+
+	if item.isConjured {
 		qualityEvolution *= 2
 	}
 
