@@ -8,20 +8,17 @@ import (
 
 const maxDice = 6
 
-// Score for numbers appearing 1 or 2 times
-const basePointsUnit = 0
+// Defines the score of some values when they appear in 1 or 2 dice only
+var scoreUnit = map[int]int{
+	1: 100,
+	5: 50,
+}
 
 // straight == all dice have a different value
 const scoreStraight = 1200
 
 // Base for the score for numbers appearing 3 or more times
 const baseScoreThreeOfAKind = 100
-
-// Override score for numbers appearing 1 or 2 times
-var specialScoreUnit = map[int]int{
-	1: 100,
-	5: 50,
-}
 
 // Override score for numbers appearing 3 or more times
 var specialScoreThreeOfAKind = map[int]int{
@@ -51,7 +48,12 @@ func CalculateScore(values []int) int {
 	}
 	score := 0
 	for value, count := range countsPerValue {
-		score += calculateValueScore(value, count)
+		valueScore := calculateValueScore(value, count)
+		if valueScore == 0 {
+			score = 0
+			break
+		}
+		score += valueScore
 	}
 	return score
 }
@@ -65,11 +67,10 @@ func calculateValueScore(value, count int) int {
 			base = value * baseScoreThreeOfAKind
 		}
 		score += base * int(math.Pow(2, float64(count-3)))
-	} else {
-		if base, found = specialScoreUnit[value]; !found {
-			base = basePointsUnit
-		}
+	} else if base, found = scoreUnit[value]; found {
 		score += base * count
+	} else {
+		score = 0
 	}
 	return score
 }

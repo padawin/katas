@@ -77,6 +77,9 @@ func Test_CalculateScoreForDifferentValues(t *testing.T) {
 		{[]int{1, 5, 5}, 200},
 		{[]int{1, 1, 5}, 250},
 		{[]int{4, 4, 4, 1, 5}, 550},
+		// Selecting a combination worth nothing along with some marking points
+		// invalidates the score
+		{[]int{1, 1, 3}, 0},
 		// straight
 		{[]int{1, 2, 3, 4, 5, 6}, 1200},
 		{[]int{3, 1, 6, 4, 2, 5}, 1200},
