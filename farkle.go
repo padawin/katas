@@ -37,12 +37,16 @@ func RollNDice(n int) ([]int, error) {
 	return res, nil
 }
 
-func CalculateScore(values []int) int {
-	// Group per values
+func groupValuesPerCount(values []int) map[int]int {
 	countsPerValue := map[int]int{}
 	for _, value := range values {
 		countsPerValue[value]++
 	}
+	return countsPerValue
+}
+
+func CalculateScore(values []int) int {
+	countsPerValue := groupValuesPerCount(values)
 	if len(countsPerValue) == maxDice {
 		return scoreStraight
 	}
@@ -73,4 +77,20 @@ func calculateValueScore(value, count int) int {
 		score = 0
 	}
 	return score
+}
+
+// IsBust returns true if the throw cannot score any point
+func IsBust(throw []int) (*bool, error) {
+	if len(throw) == 0 {
+		return nil, fmt.Errorf("cannot detect a bust in an empty set of values")
+	}
+	countsPerValue := groupValuesPerCount(throw)
+	isBust := true
+	for value, count := range countsPerValue {
+		_, found := scoreUnit[value]
+		if count >= 3 || found {
+			isBust = false
+		}
+	}
+	return &isBust, nil
 }

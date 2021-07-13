@@ -91,3 +91,76 @@ func Test_CalculateScoreForDifferentValues(t *testing.T) {
 		}
 	}
 }
+
+func Test_IsBustWithNoValueShouldReturnAnError(t *testing.T) {
+	g := NewGomegaWithT(t)
+	res, err := IsBust([]int{})
+	g.Expect(res).To(BeNil())
+	g.Expect(err).To(Not(BeNil()))
+}
+
+func Test_IsBust(t *testing.T) {
+	g := NewGomegaWithT(t)
+	type testData struct {
+		play   []int
+		isBust bool
+	}
+	fixtures := []testData{
+		{[]int{1}, false},
+		{[]int{1, 1}, false},
+		{[]int{1, 1, 1}, false},
+		{[]int{1, 1, 1, 1}, false},
+		{[]int{1, 1, 1, 1, 1}, false},
+		{[]int{1, 1, 1, 1, 1, 1}, false},
+		{[]int{2, 2, 2}, false},
+		{[]int{2, 2, 2, 2}, false},
+		{[]int{2, 2, 2, 2, 2}, false},
+		{[]int{2, 2, 2, 2, 2, 2}, false},
+		{[]int{3, 3, 3}, false},
+		{[]int{3, 3, 3, 3}, false},
+		{[]int{3, 3, 3, 3, 3}, false},
+		{[]int{3, 3, 3, 3, 3, 3}, false},
+		{[]int{4, 4, 4}, false},
+		{[]int{4, 4, 4, 4}, false},
+		{[]int{4, 4, 4, 4, 4}, false},
+		{[]int{4, 4, 4, 4, 4, 4}, false},
+		{[]int{5}, false},
+		{[]int{5, 5}, false},
+		{[]int{5, 5, 5}, false},
+		{[]int{5, 5, 5, 5}, false},
+		{[]int{5, 5, 5, 5, 5}, false},
+		{[]int{5, 5, 5, 5, 5, 5}, false},
+		{[]int{6, 6, 6}, false},
+		{[]int{6, 6, 6, 6}, false},
+		{[]int{6, 6, 6, 6, 6}, false},
+		{[]int{6, 6, 6, 6, 6, 6}, false},
+		// combinations
+		{[]int{1, 5, 5}, false},
+		{[]int{1, 1, 5}, false},
+		{[]int{4, 4, 4, 1, 5}, false},
+		// even though 3 is worth nothing, [1, 1] makes points, so it is not a
+		// bust
+		{[]int{1, 1, 3}, false},
+		// straight
+		{[]int{1, 2, 3, 4, 5, 6}, false},
+		{[]int{3, 1, 6, 4, 2, 5}, false},
+		// Bust cases
+		{[]int{2}, true},
+		{[]int{3}, true},
+		{[]int{4}, true},
+		{[]int{6}, true},
+		{[]int{2, 2}, true},
+		{[]int{3, 3}, true},
+		{[]int{4, 4}, true},
+		{[]int{6, 6}, true},
+		// Combination of busts
+		{[]int{6, 6, 3, 2, 2, 4}, true},
+	}
+	for _, fixture := range fixtures {
+		isBust, err := IsBust(fixture.play)
+		g.Expect(err).To(BeNil())
+		if *isBust != fixture.isBust {
+			t.Errorf("Bust: With play %v, expected %v but got %v ", fixture.play, fixture.isBust, *isBust)
+		}
+	}
+}
