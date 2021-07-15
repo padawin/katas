@@ -23,3 +23,17 @@ Farkle is a dice game. The rules can be found here: https://en.wikipedia.org/wik
 
     Straight [1,2,3,4,5,6] (1200)
 
+## Usage
+
+### Run tests
+
+	go test ./...
+
+### Run tests with code coverage
+
+	go test ./... -coverprofile=/tmp/coverage.out
+	go tool cover -html=/tmp/coverage.out
+
+### Play game
+
+	go run main.go
