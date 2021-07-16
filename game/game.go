@@ -49,6 +49,17 @@ func (g *Game) CreatePlayers() {
 	g.players = players{{name1, 0}, {name2, 0}}
 }
 
+// Main loop, does not have unit tests
+func (g *Game) Run() {
+	var winner *player
+	for winner == nil {
+		throw, _ := farkle.RollNDice(g.throwSize)
+		g.turn(throw)
+		winner = g.getWinner()
+		time.Sleep(3 * time.Second)
+	}
+}
+
 func (g *Game) getWinner() *player {
 	for _, player := range g.players {
 		if player.score >= g.maxScore {
