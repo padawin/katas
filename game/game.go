@@ -81,6 +81,7 @@ func (g *Game) turn(throw []int) {
 		g.turnScore += throwScore
 		if endThrowChoice == endTurn {
 			g.endTurn()
+			g.ui.showFinalTurnScore(g.turnScore)
 		} else {
 			g.updateThrowSize(countDiceKeptByPlayer)
 		}

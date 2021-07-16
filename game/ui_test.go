@@ -33,6 +33,14 @@ func Test_ShowTurnScore(t *testing.T) {
 	g.Expect(b.String()).To(Equal("This turn might bring you 42 points\n"))
 }
 
+func Test_ShowFinalTurnScore(t *testing.T) {
+	g := NewGomegaWithT(t)
+	b := bytes.Buffer{}
+	ui := NewTermUI(&b)
+	ui.showFinalTurnScore(42)
+	g.Expect(b.String()).To(Equal("You got 42 points!\n"))
+}
+
 func Test_ShowThrow(t *testing.T) {
 	g := NewGomegaWithT(t)
 	b := bytes.Buffer{}
