@@ -15,6 +15,7 @@ type mockUI struct {
 func (m mockUI) showBust()                        {}
 func (m mockUI) showError(err error)              {}
 func (m mockUI) showScore(p player)               {}
+func (m mockUI) showWinner(p player)              {}
 func (m mockUI) showThrow(throw []int)            {}
 func (m mockUI) showTurnScore(turnScore int)      {}
 func (m mockUI) showFinalTurnScore(turnScore int) {}

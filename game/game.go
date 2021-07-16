@@ -58,6 +58,7 @@ func (g *Game) Run() {
 		winner = g.getWinner()
 		time.Sleep(3 * time.Second)
 	}
+	g.ui.showWinner(*winner)
 }
 
 func (g *Game) getWinner() *player {
@@ -80,8 +81,8 @@ func (g *Game) turn(throw []int) {
 		throwScore, countDiceKeptByPlayer, endThrowChoice := g.makePlayerSelectDice(throw)
 		g.turnScore += throwScore
 		if endThrowChoice == endTurn {
-			g.endTurn()
 			g.ui.showFinalTurnScore(g.turnScore)
+			g.endTurn()
 		} else {
 			g.updateThrowSize(countDiceKeptByPlayer)
 		}

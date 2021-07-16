@@ -9,6 +9,7 @@ import (
 type UI interface {
 	showBust()
 	showScore(player player)
+	showWinner(player player)
 	showTurnScore(turnScore int)
 	showFinalTurnScore(turnScore int)
 	showThrow(throw []int)
@@ -29,6 +30,10 @@ func (u *TermUI) showBust() {
 
 func (u *TermUI) showScore(player player) {
 	fmt.Fprintf(u.output, "%s, you have %d points\n", player.name, player.score)
+}
+
+func (u *TermUI) showWinner(player player) {
+	fmt.Fprintf(u.output, "Congratulation! %s, you won with %d points!\n", player.name, player.score)
 }
 
 func (u *TermUI) showTurnScore(turnScore int) {

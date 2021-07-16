@@ -25,6 +25,15 @@ func Test_ShowScore(t *testing.T) {
 	g.Expect(b.String()).To(Equal("John Doe, you have 42 points\n"))
 }
 
+func Test_ShowWinner(t *testing.T) {
+	g := NewGomegaWithT(t)
+	b := bytes.Buffer{}
+	ui := NewTermUI(&b)
+	p := player{"John Doe", 42}
+	ui.showWinner(p)
+	g.Expect(b.String()).To(Equal("Congratulation! John Doe, you won with 42 points!\n"))
+}
+
 func Test_ShowTurnScore(t *testing.T) {
 	g := NewGomegaWithT(t)
 	b := bytes.Buffer{}
