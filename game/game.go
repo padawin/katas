@@ -56,7 +56,9 @@ func (g *Game) Run() {
 		throw, _ := farkle.RollNDice(g.throwSize)
 		g.turn(throw)
 		winner = g.getWinner()
-		time.Sleep(3 * time.Second)
+		if g.currentPlayer != currentPlayer {
+			time.Sleep(3 * time.Second)
+		}
 	}
 	g.ui.showWinner(*winner)
 }
