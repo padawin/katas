@@ -1,5 +1,7 @@
 # GO Starter
 
+Description of the Kata: http://iamnotmyself.com/2011/02/14/refactor-this-the-gilded-rose-kata/
+
 - Run :
 
 ```shell
