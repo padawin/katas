@@ -52,7 +52,7 @@ func Test_ReadDiceToKeep(t *testing.T) {
 	output := bytes.Buffer{}
 	ui := NewTermUserInput(&input, &output)
 	input.WriteString("1 4 3 2")
-	diceIndices := ui.readDiceToKeep()
+	diceIndices := ui.readDiceToKeep(5)
 	g.Expect(output.String()).To(Equal("Select \033[5;32mdice number(s)\033[0m to keep: "))
 	g.Expect(diceIndices).To(Equal([]int{0, 3, 2, 1}))
 }
@@ -67,9 +67,10 @@ func Test_ReadDiceToKeepInvalidInput(t *testing.T) {
 	input.WriteString("1 2 3 foo bar\n")
 	input.WriteString("-1 2 3\n")
 	input.WriteString("1 4 0 2\n")
+	input.WriteString("1 4 3 2 8\n")
 	input.WriteString("1 4 3 2")
 	ui := NewTermUserInput(&input, &output)
-	diceIndices := ui.readDiceToKeep()
+	diceIndices := ui.readDiceToKeep(5)
 	expectedOutput := []string{
 		"Select \033[5;32mdice number(s)\033[0m to keep: ",
 		"Please choose at least one dice\n",
@@ -84,6 +85,8 @@ func Test_ReadDiceToKeepInvalidInput(t *testing.T) {
 		"Select \033[5;32mdice number(s)\033[0m to keep: ",
 		"0 is not a valid die number\n",
 		"Select \033[5;32mdice number(s)\033[0m to keep: ",
+		"8 is not a valid die number\n",
+		"Select \033[5;32mdice number(s)\033[0m to keep: ",
 	}
 	g.Expect(output.String()).To(Equal(strings.Join(expectedOutput, "")))
 	g.Expect(diceIndices).To(Equal([]int{0, 3, 2, 1}))
@@ -95,7 +98,7 @@ func Test_ReadDiceToKeepDuplicatedNumbers(t *testing.T) {
 	output := bytes.Buffer{}
 	ui := NewTermUserInput(&input, &output)
 	input.WriteString("1 1 1 1")
-	diceIndices := ui.readDiceToKeep()
+	diceIndices := ui.readDiceToKeep(2)
 	g.Expect(output.String()).To(Equal("Select \033[5;32mdice number(s)\033[0m to keep: "))
 	g.Expect(diceIndices).To(Equal([]int{0}))
 }

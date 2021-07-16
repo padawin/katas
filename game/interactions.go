@@ -10,7 +10,7 @@ import (
 
 type UserInput interface {
 	readPlayerName(prompt string) string
-	readDiceToKeep() []int
+	readDiceToKeep(countAvailableDice int) []int
 	readEndThrowChoice() turnChoice
 }
 
@@ -35,7 +35,7 @@ func (i *TermUserInput) readPlayerName(prompt string) string {
 	return name
 }
 
-func (i *TermUserInput) readDiceToKeep() []int {
+func (i *TermUserInput) readDiceToKeep(countAvailableDice int) []int {
 	reader := bufio.NewReader(i.input)
 	var selection string
 	var dice []int
@@ -48,7 +48,7 @@ func (i *TermUserInput) readDiceToKeep() []int {
 			fmt.Fprintln(i.output, "Please choose at least one dice")
 			continue
 		}
-		dice, err = _stringToIndices(selection)
+		dice, err = _stringToIndices(selection, countAvailableDice)
 		if err != nil {
 			fmt.Fprintln(i.output, err)
 		} else {
@@ -59,12 +59,12 @@ func (i *TermUserInput) readDiceToKeep() []int {
 	return _removeDuplicateValues(dice)
 }
 
-func _stringToIndices(selection string) ([]int, error) {
+func _stringToIndices(selection string, maxValue int) ([]int, error) {
 	values := strings.Split(selection, " ")
 	res := []int{}
 	for _, valStr := range values {
 		val, err := strconv.Atoi(valStr)
-		if err != nil || val <= 0 {
+		if err != nil || val <= 0 || val > maxValue {
 			return res, fmt.Errorf("%s is not a valid die number", valStr)
 		}
 		// The user reads values from 1 to n, so we convert them in 0-based values
