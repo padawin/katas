@@ -7,6 +7,7 @@ import (
 )
 
 type UI interface {
+	clearScreen()
 	showBust()
 	showScore(player player)
 	showWinner(player player)
@@ -22,6 +23,10 @@ type TermUI struct {
 
 func NewTermUI(output io.Writer) *TermUI {
 	return &TermUI{output}
+}
+
+func (u *TermUI) clearScreen() {
+	fmt.Fprint(u.output, "\033[3J\033[2J\033[0;0H")
 }
 
 func (u *TermUI) showBust() {

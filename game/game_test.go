@@ -12,6 +12,7 @@ import (
 type mockUI struct {
 }
 
+func (m mockUI) clearScreen()                     {}
 func (m mockUI) showBust()                        {}
 func (m mockUI) showError(err error)              {}
 func (m mockUI) showScore(p player)               {}
@@ -72,7 +73,7 @@ func Test_CreatePlayers(t *testing.T) {
 
 func Test_GetWinnerNoPlayer(t *testing.T) {
 	g := NewGomegaWithT(t)
-	gameInstance := NewGame(nil, nil, 2000)
+	gameInstance := NewGame(mockUI{}, nil, 2000)
 	winner := gameInstance.getWinner()
 	g.Expect(winner).To(BeNil())
 }

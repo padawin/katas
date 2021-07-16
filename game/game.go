@@ -34,6 +34,7 @@ type Game struct {
 }
 
 func NewGame(ui UI, userInput UserInput, maxScore int) Game {
+	ui.clearScreen()
 	return Game{
 		ui:            ui,
 		userInput:     userInput,
@@ -53,6 +54,8 @@ func (g *Game) CreatePlayers() {
 func (g *Game) Run() {
 	var winner *player
 	for winner == nil {
+		g.ui.clearScreen()
+		currentPlayer := g.currentPlayer
 		throw, _ := farkle.RollNDice(g.throwSize)
 		g.turn(throw)
 		winner = g.getWinner()
